@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol ClientManagerDelegate: AnyObject {
+    func sendMsgToClient(_ data: Data)
+}
+
 class ClientManager {
     var tcpClient: TCPClient
-    
+    weak var delegate: ClientManagerDelegate?
     fileprivate var isClientConnected: Bool = false
     
     init(tcpClient: TCPClient) {
@@ -22,11 +26,11 @@ extension ClientManager {
         isClientConnected = true
         //4是和服务器约定，前面4个保存的是消息总长度
         while isClientConnected {
-            if let headData = tcpClient.read(4) {
+            if let hMsg = tcpClient.read(4) {
                 //1.读取消息长度的data
-                let msgData = Data(bytes: headData, count: 4)
+                let headerData = Data(bytes: hMsg, count: 4)
                 var msgLength: Int = 0
-                (msgData as NSData).getBytes(&msgLength, length: 4)
+                (headerData as NSData).getBytes(&msgLength, length: 4)
                 print("消息长度===\(msgLength)")
                 
                 //2.读取消息类型的data
@@ -34,19 +38,32 @@ extension ClientManager {
                 let typeData = Data(bytes: typeMsg, count: 2)
                 var type: Int = 0
                 (typeData as NSData).getBytes(&type, length: 2)
-                print("类型长度====\(type)")
-                
+                print("类型====\(type)")
                 
                 //2.根据长度读取真实消息
                 guard let msg = tcpClient.read(msgLength) else {
                     return
                 }
-                let data = Data(bytes: msg, count: msgLength)
-                let message = String(data: data, encoding: .utf8)
-                print("msg===\(message ?? "xxx")")
+                let msgData = Data(bytes: msg, count: msgLength)
+                switch type {
+                case 0, 1:
+                    do {
+                        let user = try UserInfo(serializedData: msgData)
+                        print("name==\(user.name), level==\(user.level)")
+                    } catch {
+                        print("解析错误")
+                    }
+                default:
+                    print("未知消息类型")
+                }
+                
+                let totalData = headerData + typeData + msgData
+                delegate?.sendMsgToClient(totalData)
+                
             } else {
                 isClientConnected = false
                 print("客户端断开了连接")
+                tcpClient.close()
             }
         }
     }

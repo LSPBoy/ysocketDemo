@@ -9,42 +9,47 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    fileprivate lazy var socket: SocketManager = SocketManager(addr: "127.0.0.1", port: 7878)
+    @IBOutlet weak var hintLabel: UILabel!
+    
+    fileprivate lazy var socketMgr: SocketManager = SocketManager(addr: "127.0.0.1", port: 7878)
     @IBOutlet weak var inputField: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        
+        hintLabel.isHidden = true
     }
 
     @IBAction func connnectServer(_ sender: Any) {
-        if socket.connectServer() {
-            print("连接上了服务器")
+        hintLabel.isHidden = false
+        if socketMgr.connectServer() {
+            hintLabel.text = "连接上了服务器"
+            hintLabel.textColor = .green
+            socketMgr.startReadMsg()
+        } else {
+            hintLabel.text = "连接失败"
+            hintLabel.textColor = .red
         }
     }
     
     @IBAction func sendMsg(_ sender: Any) {
-        if let message = inputField.text {
-            //1.获取消息长度
-            guard let data = message.data(using: .utf8) else {
-                return
-            }
-            var length = data.count
-            
-            //2.将消息长度，写入到data
-            let headerData = Data(bytes: &length, count: 4)
-            
-            
-            //3.消息类型
-            var type = 2
-            let typeData = Data(bytes: &type, count: 2)
-            
-            //3.发消息
-            let totalData = headerData + typeData + data
-            socket.sendData(totalData)
-        }
+        guard let message = inputField.text else { return }
+        socketMgr.sendTextMsg(message: message)
     }
     
+    @IBAction func joinRoom(_ sender: Any) {
+        socketMgr.sendJoinRoomMsg()
+    }
+    
+    @IBAction func leaveRoom(_ sender: Any) {
+        socketMgr.sendLeaveRoomMsg()
+    }
+    
+    @IBAction func sendGift(_ sender: Any) {
+        socketMgr.sendGiftMsg(giftName: "嘉年华", giftURL: "https:www.baidu.com", giftCount: 10)
+    }
 }
 
+extension ViewController {
+   
+}

@@ -10,7 +10,7 @@ import UIKit
 class ServerManager {
     fileprivate lazy var serverSocket: TCPServer = TCPServer(addr: "0.0.0.0", port: 7878)
     fileprivate var isServerRunning: Bool = false
-    fileprivate lazy var clientMrgs: [ClientManager] = [ClientManager]()
+    fileprivate lazy var clientMgrs: [ClientManager] = [ClientManager]()
 }
 
 extension ServerManager {
@@ -43,11 +43,19 @@ extension ServerManager {
     fileprivate func handleClient(_ client: TCPClient) {
         //1.用一个ClientManager管理tcpClient
         let mgr = ClientManager(tcpClient: client)
-        
+        mgr.delegate = self
         //2.保存客户端
-        clientMrgs.append(mgr)
+        clientMgrs.append(mgr)
         
         //3.用client开始接收消息
         mgr.startReadMsg()
+    }
+}
+
+extension ServerManager: ClientManagerDelegate {
+    func sendMsgToClient(_ data: Data) {
+        for mgr in clientMgrs {
+            mgr.tcpClient.send(data: data)
+        }
     }
 }

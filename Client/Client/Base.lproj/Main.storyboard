@@ -25,7 +25,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入消息" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="myH-cb-wO1">
-                                <rect key="frame" x="15" y="458.66666666666669" width="283" height="40"/>
+                                <rect key="frame" x="14.999999999999986" y="458.66666666666669" width="254.66666666666663" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="A1p-a3-zos"/>
                                 </constraints>
@@ -33,17 +33,44 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ek-5o-7UP">
-                                <rect key="frame" x="313" y="461" width="65" height="35"/>
+                                <rect key="frame" x="284.66666666666669" y="461" width="93.333333333333314" height="35"/>
                                 <color key="backgroundColor" systemColor="systemGreenColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="aHU-b8-1tM"/>
-                                </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="发送">
+                                <buttonConfiguration key="configuration" style="plain" title="发送文本">
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="sendMsg:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Ng-el-pKP"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="slp-hi-adY">
+                                <rect key="frame" x="175.66666666666666" y="372.66666666666669" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vsX-OB-Mpi">
+                                <rect key="frame" x="149.66666666666666" y="513.66666666666663" width="94" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="进入房间"/>
+                                <connections>
+                                    <action selector="joinRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5IC-Jw-cl4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFp-0i-6cu">
+                                <rect key="frame" x="149.66666666666666" y="563.66666666666663" width="94" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="离开房间"/>
+                                <connections>
+                                    <action selector="leaveRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CLS-Ep-OOC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c8j-eb-WSB">
+                                <rect key="frame" x="149.66666666666666" y="613.66666666666663" width="94" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="发送礼物"/>
+                                <connections>
+                                    <action selector="sendGift:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vrW-Gv-CSf"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -51,15 +78,24 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4ek-5o-7UP" secondAttribute="trailing" constant="15" id="3FI-iM-LlC"/>
+                            <constraint firstItem="kFp-0i-6cu" firstAttribute="top" secondItem="vsX-OB-Mpi" secondAttribute="bottom" constant="15" id="8ir-v4-umT"/>
+                            <constraint firstItem="kFp-0i-6cu" firstAttribute="centerX" secondItem="vsX-OB-Mpi" secondAttribute="centerX" id="CFV-Jy-kko"/>
+                            <constraint firstItem="vsX-OB-Mpi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LrU-cG-Vw9"/>
+                            <constraint firstItem="Kd5-3b-s3E" firstAttribute="top" secondItem="slp-hi-adY" secondAttribute="bottom" constant="15" id="PdH-nN-nIk"/>
+                            <constraint firstItem="c8j-eb-WSB" firstAttribute="top" secondItem="kFp-0i-6cu" secondAttribute="bottom" constant="15" id="V4F-eJ-0C3"/>
+                            <constraint firstItem="c8j-eb-WSB" firstAttribute="centerX" secondItem="vsX-OB-Mpi" secondAttribute="centerX" id="ZvH-ot-SGO"/>
                             <constraint firstItem="4ek-5o-7UP" firstAttribute="leading" secondItem="myH-cb-wO1" secondAttribute="trailing" constant="15" id="baO-BV-7L2"/>
                             <constraint firstItem="4ek-5o-7UP" firstAttribute="centerY" secondItem="myH-cb-wO1" secondAttribute="centerY" id="cHd-8J-lkH"/>
                             <constraint firstItem="Kd5-3b-s3E" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l7S-e2-ReS"/>
+                            <constraint firstItem="vsX-OB-Mpi" firstAttribute="top" secondItem="myH-cb-wO1" secondAttribute="bottom" constant="15" id="m4X-71-Vzd"/>
                             <constraint firstItem="Kd5-3b-s3E" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qIW-qX-iVQ"/>
                             <constraint firstItem="myH-cb-wO1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="s7l-52-VjE"/>
+                            <constraint firstItem="slp-hi-adY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zZy-Ia-681"/>
                             <constraint firstItem="myH-cb-wO1" firstAttribute="top" secondItem="Kd5-3b-s3E" secondAttribute="bottom" constant="15" id="zyU-IG-2Wu"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="hintLabel" destination="slp-hi-adY" id="Zxy-fo-woH"/>
                         <outlet property="inputField" destination="myH-cb-wO1" id="jaD-QO-6CQ"/>
                     </connections>
                 </viewController>
