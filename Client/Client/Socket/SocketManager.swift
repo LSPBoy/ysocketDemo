@@ -128,6 +128,7 @@ extension SocketManager {
     func sendTextMsg(message: String) {
         var chatMsg = ChatMessage()
         chatMsg.text = message
+        chatMsg.user = userInfo
         do {
           let chatData = try chatMsg.serializedData()
           sendMsg(data: chatData, type: 2)
@@ -137,6 +138,7 @@ extension SocketManager {
     //type3
     func sendGiftMsg(giftName: String, giftURL: String, giftCount: Int) {
         var giftMsg = GiftMessage()
+        giftMsg.user = userInfo
         giftMsg.giftname = giftName
         giftMsg.giftURL = giftURL
         giftMsg.giftcount = Int32(giftCount)
@@ -144,6 +146,18 @@ extension SocketManager {
           let giftData = try giftMsg.serializedData()
           sendMsg(data: giftData, type: 3)
         } catch {}
+    }
+    
+    //type100
+    func sendHeartBeat() {
+        //1.获取心跳包的数据
+        let heartString = "I am is heart beat;"
+        guard let heartData = heartString.data(using: .utf8) else {
+            return
+        }
+
+        //2.发送心跳包，约定type是100
+        sendMsg(data: heartData, type: 100)
     }
     
     private func sendMsg(data: Data, type: Int) {

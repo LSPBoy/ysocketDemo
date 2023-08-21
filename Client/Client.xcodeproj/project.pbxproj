@@ -121,7 +121,7 @@
 		18F42C582A8DEA5B00695D3A /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				18F42C892A8DEA6500695D3A /* LSPSocket */,
+				18F42C892A8DEA6500695D3A /* Socket */,
 				18F42C592A8DEA5B00695D3A /* AppDelegate.swift */,
 				18F42C5B2A8DEA5B00695D3A /* SceneDelegate.swift */,
 				18F42C5D2A8DEA5B00695D3A /* ViewController.swift */,
@@ -151,14 +151,14 @@
 			path = ClientUITests;
 			sourceTree = "<group>";
 		};
-		18F42C892A8DEA6500695D3A /* LSPSocket */ = {
+		18F42C892A8DEA6500695D3A /* Socket */ = {
 			isa = PBXGroup;
 			children = (
 				18F42C8A2A8DEA8A00695D3A /* ysocket */,
 				18F42CE82A8E1F0A00695D3A /* IMMessage.pb.swift */,
 				18F42C952A8DEAF900695D3A /* SocketManager.swift */,
 			);
-			path = LSPSocket;
+			path = Socket;
 			sourceTree = "<group>";
 		};
 		18F42C8A2A8DEA8A00695D3A /* ysocket */ = {

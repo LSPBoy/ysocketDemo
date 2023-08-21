@@ -9,12 +9,17 @@ import UIKit
 
 protocol ClientManagerDelegate: AnyObject {
     func sendMsgToClient(_ data: Data)
+    func removeClient(_ client: ClientManager)
 }
 
-class ClientManager {
+class ClientManager: NSObject {
     var tcpClient: TCPClient
     weak var delegate: ClientManagerDelegate?
     fileprivate var isClientConnected: Bool = false
+    
+    fileprivate var heartTimeCount : Int = 0
+    
+    fileprivate var timer: Timer?
     
     init(tcpClient: TCPClient) {
         self.tcpClient = tcpClient
@@ -22,10 +27,17 @@ class ClientManager {
 }
 
 extension ClientManager {
+    
     func startReadMsg() {
         isClientConnected = true
+        
+        timer = Timer(fireAt: Date(), interval: 1, target: self, selector: #selector(checkHeartBeat), userInfo: nil, repeats: true)
+        RunLoop.current.add(timer!, forMode: .common)
+        timer!.fire()
+        
         //4是和服务器约定，前面4个保存的是消息总长度
         while isClientConnected {
+   
             if let hMsg = tcpClient.read(4) {
                 //1.读取消息长度的data
                 let headerData = Data(bytes: hMsg, count: 4)
@@ -45,26 +57,48 @@ extension ClientManager {
                     return
                 }
                 let msgData = Data(bytes: msg, count: msgLength)
-                switch type {
-                case 0, 1:
-                    do {
-                        let user = try UserInfo(serializedData: msgData)
-                        print("name==\(user.name), level==\(user.level)")
-                    } catch {
-                        print("解析错误")
-                    }
-                default:
-                    print("未知消息类型")
+                print("type===\(type)")
+                if type == 1 {//退出房间
+                    tcpClient.close()
+                    delegate?.removeClient(self)
+                } else if type == 100 {//约定type100是心跳包，心跳不用转发给其他人，所以continue
+                    heartTimeCount = 0
+                    continue
                 }
-                
+                let message = String(data: msgData, encoding: .utf8)
+                print("message===\(message ?? "")")
                 let totalData = headerData + typeData + msgData
                 delegate?.sendMsgToClient(totalData)
                 
             } else {
-                isClientConnected = false
-                print("客户端断开了连接")
-                tcpClient.close()
+                removeClient()
             }
         }
+    }
+}
+
+extension ClientManager {
+    
+    private func removeClient() {
+        print("客户端断开了连接")
+        delegate?.removeClient(self)
+        isClientConnected = false
+        tcpClient.close()
+        stopTimer()
+    }
+    
+    
+    private func stopTimer() {
+        print("移除定时器")
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @objc fileprivate func checkHeartBeat() {
+        heartTimeCount += 1
+        if heartTimeCount >= 10 {
+            self.removeClient()
+        }
+        print("检查心跳：\(heartTimeCount)");
     }
 }

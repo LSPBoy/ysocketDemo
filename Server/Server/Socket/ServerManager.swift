@@ -58,4 +58,9 @@ extension ServerManager: ClientManagerDelegate {
             mgr.tcpClient.send(data: data)
         }
     }
+    
+    func removeClient(_ client: ClientManager) {
+        guard let index = clientMgrs.firstIndex(of: client) else { return }
+        clientMgrs.remove(at: index)
+    }
 }
